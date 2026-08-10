@@ -27,11 +27,19 @@ int main(){
             runing = false;
             break;
         }
+        else if(tie(space)){
+            runing = false;
+            break;
+        }
 
         computermove(computer,space);
         board(space);
 
         if(check(space,player,computer)){
+            runing = false;
+            break;
+        }
+        else if(tie(space)){
             runing = false;
             break;
         }
@@ -57,26 +65,27 @@ void board(char *space){
 
 void playermove(char player,char *space){
     int no;
+    bool valid = false;
     do{
         std::cout << "chose a no. b/w 1 and 9 that is corresponding to grid 1,2,3"<<"\n"<<"4,5,6,\n"<<"7,8,9"<<"\n";
         std::cin >> no;
         no--;
         if(space[no] == ' '){
             space[no] = player;
-            break;
+            valid = true;
         }
         else if(space[no] != ' '){
             std::cout << "enter a valid no. or space is already taken";
         }
     }
    
-    while(!no <0|| !no>8);
+    while(valid);
 }
 
 void computermove(char computer,char *space){
     while(true){
     srand(time(NULL));
-    int a = (rand()%8)+1;
+    int a = (rand()%9);
     if(space[a] == ' '){
         space[a] = computer;
         break;
@@ -107,11 +116,11 @@ bool check(char *space,char player,char computer){
     {
     space[1] == player ? std::cout << "you won" : std::cout << "you lose";
     }
-    else if(space[2] != ' ' && space[2] == space[5] & space[5] == space[9])
+    else if(space[2] != ' ' && space[2] == space[5] & space[5] == space[8])
     {
     space[2] == player ? std::cout << "you won" : std::cout << "you lose";
     }
-    else if(space[0] != ' ' && space[0] == space[4] & space[4] == space[9])
+    else if(space[0] != ' ' && space[0] == space[4] & space[4] == space[8])
     {
     space[0] == player ? std::cout << "you won" : std::cout << "you lose";
     }
