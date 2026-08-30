@@ -3,9 +3,9 @@
 struct student{
     std::string sname;
     float marks;
-    bool is_shit_at_studing ;
 };
 
+void print(student s);
 
 int main(){
     student s1;
@@ -16,6 +16,12 @@ int main(){
     s2.sname = "idiot";
     s2.marks = 1;
 
-    std::cout << s1.sname << "\n" << s2.sname;
+    print(s1);
+    print(s2);
     return 0;
+}
+
+void print(student s){
+    std::cout << s.sname << "\n";
+    std::cout << s.marks<<"\n";
 }
