@@ -5,4 +5,5 @@ this repo have some basic problems that i found on internet
 most of them are written by me in a sense it's my own unique way to solve
 some i have followed they tutorial for them
 added reverting an array with similar bubblesort al
-
+made my own encription algorithm by scartch
+working on pointers now
