@@ -112,3 +112,6 @@ void crossover(int parent1,int parent2){
     }
 }
 
+/*i don't know how to implement child brcoming the new parent and weather go elitism apporach or mutation apporch as of right now cause mutation should be used anyways
+however right now it would hinder the dev proceess right now shoudl add a function to add mutation*/
+
