@@ -5,6 +5,8 @@
 #include <utility>
 #include <algorithm>
 
+const std::string pool = "AaBbCcDdEeFfGgHhIiJjKkLlMm NnOoPpQqRrSsTtUuVvWwXxYyZz";
+
 std::string name = "My name is water";
 std::vector<double>normalised_fit;
 std::vector <double> all_fit_score;
@@ -15,30 +17,52 @@ void fit_normalization(std::vector<double> &all_fit_score);
 std::pair<int,int> wheel_of_fortune(std::vector<double> &normalised_fit);
 std::string crossover(int parent1,int parent2);
 void clear(std::vector<double>&normalised_fit,std::vector <double> &all_fit_score);
+std::string mutation(std::string child);
 
 
 int main(){
     
-    do{
-        generator(name.length(),10);
-        for(int i=0 ;i<100;i++){
+    generator(name.length(), 100);
     
-    fitness(random);
-    fit_normalization(all_fit_score);
-    auto [a,b] = wheel_of_fortune(normalised_fit);
+    int generation_count = 0; 
 
-    random.push_back(crossover(a,b));
+    do {
+        for(int i = 0; i < 100; i++) {
+            fitness(random);
+            fit_normalization(all_fit_score);
+            auto [a, b] = wheel_of_fortune(normalised_fit);
 
-    
-    clear(normalised_fit,all_fit_score);
+            std::string child = crossover(a, b);
+            std::string mutated_child = mutation(child);
+            
+            random.push_back(mutated_child);
+              
+            random.erase(random.begin()); 
+                   
+            clear(normalised_fit,all_fit_score);
         }
-    }while(std::ranges::find(random,name) == random.end());
+        
+        generation_count++;
+        std::cout << "Generation " << generation_count << " Best: " << random.back() << "\n";
+ 
+    } while(std::ranges::find(random, name) == random.end());
+
+    std::cout << "\nSUCCESS! Target string found!\n";
+    
+    // --- FINAL PRINT LOOP ---
+    // This runs ONCE at the very end and will absolutely include "My name is water"
+    std::cout << "--- Final Population Vector Elements ---\n";
+    for(int i = 0; i < random.size(); i++){
+        std::cout << random[i] << "\n";
+    }
 
     return 0;
 }
 
+
+
 std::vector<std::string> generator(int length,int no_of_string){
-    const std::string pool = "AaBbCcDdEeFfGgHhIiJjKkLlMm NnOoPpQqRrSsTtUuVvWwXxYyZz";
+    
     std::random_device rd;
     std::mt19937 generator(rd());
 
@@ -54,9 +78,7 @@ for(int i=0;i < no_of_string;i++){
     }
     random.push_back(temp);
     }
-    for(int i =0;i<random.size();i++){
-        std::cout<<random[i]<<"\n";
-    }
+    
     return random;
 }
 
@@ -72,6 +94,7 @@ void fitness(std::vector<std::string> &random){
         }
         all_fit_score.push_back(fit);
         
+    
     }
     all_fit_score.shrink_to_fit();
 }
@@ -122,4 +145,20 @@ std::string crossover(int parent1,int parent2){
 void clear(std::vector<double>&normalised_fit,std::vector <double> &all_fit_score){
     normalised_fit.clear();
     all_fit_score.clear();
+    
+}
+
+std::string mutation(std::string child){
+    
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<std::size_t> distribution(0, pool.size() - 1);
+    std::uniform_int_distribution<std::size_t> mutation(1, 1000);
+    for(int i =0;i<child.length();i++){
+        int propability = mutation(gen); 
+            if(propability < 5){
+                child[i] = pool[distribution(gen)];
+            }
+    }
+    return child;
 }
