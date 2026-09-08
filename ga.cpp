@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <algorithm>
+#include <iterator>
 
 const std::string pool = "AaBbCcDdEeFfGgHhIiJjKkLlMm NnOoPpQqRrSsTtUuVvWwXxYyZz";
 
@@ -18,6 +19,7 @@ std::pair<int,int> wheel_of_fortune(std::vector<double> &normalised_fit);
 std::string crossover(int parent1,int parent2);
 void clear(std::vector<double>&normalised_fit,std::vector <double> &all_fit_score);
 std::string mutation(std::string child);
+std::string elitism();
 
 
 int main(){
@@ -27,30 +29,37 @@ int main(){
     int generation_count = 0; 
 
     do {
-        for(int i = 0; i < 100; i++) {
-            fitness(random);
-            fit_normalization(all_fit_score);
+        
+        fitness(random);
+        fit_normalization(all_fit_score);
+
+        std::string best = elitism();
+        
+        generation_count++;
+        std::cout << "Generation " << generation_count << " Best: " << best << "\n";
+
+        std::vector<std::string> next_generation;
+
+    
+        for(int i = 0; i < 99; i++) {
             auto [a, b] = wheel_of_fortune(normalised_fit);
 
             std::string child = crossover(a, b);
             std::string mutated_child = mutation(child);
             
-            random.push_back(mutated_child);
-              
-            random.erase(random.begin()); 
-                   
-            clear(normalised_fit,all_fit_score);
+            next_generation.push_back(mutated_child);
         }
         
-        generation_count++;
-        std::cout << "Generation " << generation_count << " Best: " << random.back() << "\n";
+        next_generation.push_back(best);
+
+        random = std::move(next_generation);
+               
+        clear(normalised_fit, all_fit_score);
  
     } while(std::ranges::find(random, name) == random.end());
 
     std::cout << "\nSUCCESS! Target string found!\n";
     
-    // --- FINAL PRINT LOOP ---
-    // This runs ONCE at the very end and will absolutely include "My name is water"
     std::cout << "--- Final Population Vector Elements ---\n";
     for(int i = 0; i < random.size(); i++){
         std::cout << random[i] << "\n";
@@ -162,3 +171,14 @@ std::string mutation(std::string child){
     }
     return child;
 }
+
+
+std::string elitism(){
+    auto max = std::max_element(all_fit_score.begin(),all_fit_score.end());
+    int a = std::distance(all_fit_score.begin(),max);
+    std::vector<std::string> elite;
+    std::string best = random[a];
+    return best;
+}
+
+
