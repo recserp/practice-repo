@@ -3,7 +3,17 @@
 void sorts(int a[] , int size);
 
 int main(){
-    int a[10] = {10,4,2,7,5,6,3,1,9,8};
+    int t;
+    int input;
+    int a[t];
+    std::cout << "enter no off elements:";
+    std::cin >> t;
+    for(int i = 0;i<t;i++){
+        std::cout <<"\nElement:";
+        std::cin >> input;
+        a[i] = input
+    }
+    
     int size = sizeof(a)/sizeof(a[0]);
     sorts(a,size);
     for(int i = 0 ; i <size;i++){
