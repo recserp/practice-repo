@@ -8,9 +8,23 @@ typedef std::string text;
 namespace first{
     float radius = 12;
 }
+#include <iostream>
+#include <vector> 
 
+struct node{
+    public:
+    int data;
+    std::string pair;
+    node(int d1,std::string paired) : data(d1),pair(paired){}
+};
 
-
+std::vector<node> mapped(int d1,std::string paired,int size){
+    std::vector<node> hash_map;
+    for(int i = 0;i < size;i++){
+        hash_map.push_back(node(d1,paired));
+    }
+    return hash_map;
+}
 
 int main(){
     using namespace first;
